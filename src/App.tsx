@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Lenis from 'lenis'
 import { AnimatePresence, motion } from 'motion/react'
+import { Analytics } from '@vercel/analytics/react'
 import { Navbar, type Page } from './components/Navbar'
 import { Home } from './pages/Home'
 import { Examples } from './pages/Examples'
@@ -75,6 +76,7 @@ export function App() {
           {page === 'docs' && <Docs onNavigate={navigate} />}
         </motion.main>
       </AnimatePresence>
+      <Analytics />
     </div>
   )
 }
