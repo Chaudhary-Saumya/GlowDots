@@ -1,5 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { motion } from 'motion/react'
+import { GlowScrollStory, type ReactScrollStage } from 'glowdots/react'
+import { shapeDefs } from 'glowdots/shapes'
 import {
   ArrowRight,
   Atom,
@@ -154,6 +156,26 @@ mountEffect(custom, '#hero', { bloom: 0.4 })`
     code: `import { blackHole, nebula, lorenz, dna, jellyfish, mobius } from 'glowdots/shapes'
 
 blackHole('#hero', { bloom: 0.5, orbit: true, orbitZoom: true })`
+  },
+  {
+    id: 'scrollStory',
+    title: 'Scroll Storyteller (v2.1)',
+    category: 'Guide',
+    previewType: 'galaxy',
+    previewOpts: { palette: 'aurora', bloom: 0.5, count: 14000 },
+    summary: 'Scrub particles continuously across scroll stages with dwell hold zones, velocity turbulence, camera offset, and idle shader pre-warming.',
+    code: `import { GlowScrollStory } from 'glowdots/react'
+
+<GlowScrollStory
+  smoothing={0.13}
+  dwell={0.36}
+  velocityStrength={1.05}
+  stages={[
+    { trigger: '#hero',   effect: 'sphere', options: { palette: 'ember',  offset: [0, 0] } },
+    { trigger: '#middle', effect: 'galaxy', options: { palette: 'aurora', offset: [0.34, 0] } },
+    { trigger: '#cta',    effect: 'vortex', options: { palette: 'ocean',  offset: [-0.32, 0] } }
+  ]}
+/>`
   }
 ]
 
@@ -179,14 +201,74 @@ const OPTIONS_LIST: Array<{
   { name: 'trailMemory', type: 'number', def: '0', cat: 'Physics', desc: 'Lingering cursor wake along recent pointer path (seconds).' },
   { name: 'orbit / orbitZoom', type: 'boolean', def: 'false', cat: 'Physics', desc: '360° drag camera with spring inertia and optional wheel zoom.' },
   { name: 'scrollProgress / scrollSync', type: 'number / boolean', def: '— / false', cat: 'Physics', desc: 'Drive morph or global parallax/dispersion from scroll (0..1).' },
+  { name: 'offset', type: '[number, number]', def: '[0, 0]', cat: 'Physics', desc: 'NDC viewport choreography offset [-1..1] for Scroll Storyteller stages.' },
   { name: 'on', type: 'Partial<Record<FxEvent, fn>>', def: '{}', cat: 'Events', desc: 'ready, morph:done, charge:release, asset:loaded, fpsdrop, contextlost.' }
 ]
 
 export function Docs({ onNavigate }: DocsProps) {
+  const headerRef = useRef<HTMLDivElement>(null)
+  const platformsRef = useRef<HTMLElement>(null)
+  const guidesRef = useRef<HTMLElement>(null)
+  const apiRef = useRef<HTMLElement>(null)
+
   const [query, setQuery] = useState('')
   const [selectedId, setSelectedId] = useState<string>('element')
   const [optCategory, setOptCategory] = useState<OptionCategory>('All')
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
+
+  const docsStoryStages = useMemo<ReactScrollStage[]>(
+    () => [
+      {
+        trigger: headerRef,
+        effect: 'galaxy',
+        options: {
+          palette: 'ember',
+          scale: 0.78,
+          bloom: 0.55,
+          tilt: 0.85,
+          offset: [-0.66, 0.38],
+          rotationSpeed: 0.1
+        }
+      },
+      {
+        trigger: platformsRef,
+        effect: 'torusKnot',
+        options: {
+          palette: 'sunset',
+          scale: 0.72,
+          bloom: 0.55,
+          tilt: 0.35,
+          offset: [0.68, -0.34],
+          rotationSpeed: 0.14
+        }
+      },
+      {
+        trigger: guidesRef,
+        effect: 'vortex',
+        options: {
+          palette: 'ember',
+          scale: 0.74,
+          bloom: 0.55,
+          tilt: 0.25,
+          offset: [-0.68, -0.34],
+          rotationSpeed: 0.16
+        }
+      },
+      {
+        trigger: apiRef,
+        effect: shapeDefs.blackHole,
+        options: {
+          palette: 'ember',
+          scale: 0.76,
+          bloom: 0.65,
+          tilt: 0.3,
+          offset: [0.68, -0.36],
+          rotationSpeed: 0.18
+        }
+      }
+    ],
+    []
+  )
 
   const activeTopic = useMemo(
     () => TOPICS.find((t) => t.id === selectedId) ?? TOPICS[0],
@@ -215,32 +297,31 @@ export function Docs({ onNavigate }: DocsProps) {
 
   return (
     <div className="relative overflow-hidden bg-[#08080a] text-zinc-100">
-      {/* Large aesthetic galaxy shape in top-left corner behind Docs header */}
-      <div className="pointer-events-none absolute -left-36 -top-28 h-[560px] w-[560px] opacity-90">
-        <GlowCanvas
-          type="galaxy"
-          className="h-full w-full"
-          options={{
-            palette: 'ember',
-            count: 26000,
-            size: 1.5,
-            intensity: 1.65,
-            bloom: 0.65,
-            bloomRadius: 10,
-            scale: 1.2,
-            tilt: 0.85,
-            idleMotion: false,
-            interaction: 'none'
-          }}
-        />
-      </div>
+      {/* Scroll-choreographed corner particle background (top-left -> bottom-right -> bottom-left -> bottom-right) */}
+      <GlowScrollStory
+        fixed
+        stages={docsStoryStages}
+        smoothing={0.14}
+        dwell={0.35}
+        velocityStrength={0.95}
+        options={{
+          count: 20000,
+          size: 1.4,
+          intensity: 1.5,
+          bloom: 0.58,
+          bloomRadius: 9,
+          idleMotion: false,
+          interaction: 'none'
+        }}
+        style={{ zIndex: 0, opacity: 0.82 }}
+      />
 
       <div className="relative z-10 mx-auto max-w-6xl px-6 pb-24 pt-16 sm:px-10">
         {/* Header Row */}
-        <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-10 md:flex-row md:items-end">
+        <div ref={headerRef} className="flex flex-col justify-between gap-6 border-b border-white/10 pb-10 md:flex-row md:items-end">
           <h1 className="text-5xl font-bold tracking-tight text-white sm:text-7xl">Docs</h1>
           <div className="flex flex-col items-start gap-2 md:items-end">
-            <span className="font-mono text-[11px] text-zinc-500">v2.0.1</span>
+            <span className="font-mono text-[11px] text-zinc-500">v2.1.0</span>
             <div className="relative w-full md:w-64">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-500" />
               <input
@@ -248,7 +329,7 @@ export function Docs({ onNavigate }: DocsProps) {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search options & guides..."
-                className="w-full border border-white/15 bg-black/70 py-2 pl-9 pr-3 text-xs text-zinc-200 placeholder:text-zinc-500 outline-none focus:border-cyan-400/50 transition"
+                className="w-full border border-white/15 bg-black/70 py-2 pl-9 pr-3 text-xs text-zinc-200 placeholder:text-zinc-500 outline-none focus:border-[#3ee98a]/50 transition"
               />
             </div>
           </div>
@@ -264,8 +345,8 @@ export function Docs({ onNavigate }: DocsProps) {
             <p className="mb-3 font-medium text-zinc-500">Platforms</p>
             <ul className="space-y-2 text-zinc-200">
               <li>
-                <button onClick={() => jumpToTopic('react')} className="inline-flex items-center gap-2 hover:text-cyan-300 transition cursor-pointer">
-                  <Atom className="h-3.5 w-3.5 text-cyan-400" /> React / Next.js
+                <button onClick={() => jumpToTopic('react')} className="inline-flex items-center gap-2 hover:text-[#3ee98a] transition cursor-pointer">
+                  <Atom className="h-3.5 w-3.5 text-[#3ee98a]" /> React / Next.js
                 </button>
               </li>
               <li>
@@ -286,17 +367,17 @@ export function Docs({ onNavigate }: DocsProps) {
             <ul className="space-y-2 text-zinc-200">
               <li>
                 <button onClick={() => jumpToTopic('logo')} className="inline-flex items-center gap-2 hover:text-white transition cursor-pointer">
-                  <ImageIcon className="h-3.5 w-3.5 text-purple-400" /> Logo / SVG Particles
+                  <ImageIcon className="h-3.5 w-3.5 text-[#f5e11c]" /> Logo / SVG Particles
                 </button>
               </li>
               <li>
                 <button onClick={() => jumpToTopic('audio')} className="inline-flex items-center gap-2 hover:text-white transition cursor-pointer">
-                  <Music className="h-3.5 w-3.5 text-pink-400" /> Audio Reactivity
+                  <Music className="h-3.5 w-3.5 text-[#3ee98a]" /> Audio Reactivity
                 </button>
               </li>
               <li>
                 <button onClick={() => jumpToTopic('custom')} className="inline-flex items-center gap-2 hover:text-white transition cursor-pointer">
-                  <Wand2 className="h-3.5 w-3.5 text-cyan-400" /> Custom defineShape()
+                  <Wand2 className="h-3.5 w-3.5 text-[#3ee98a]" /> Custom defineShape()
                 </button>
               </li>
             </ul>
@@ -306,17 +387,17 @@ export function Docs({ onNavigate }: DocsProps) {
             <p className="mb-3 font-medium text-zinc-500">Tools</p>
             <ul className="space-y-2 text-zinc-200">
               <li>
-                <button onClick={() => onNavigate('playground')} className="hover:text-cyan-300 transition cursor-pointer">
+                <button onClick={() => onNavigate('playground')} className="hover:text-[#3ee98a] transition cursor-pointer">
                   Glowdots Studio (43 Shapes)
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavigate('examples')} className="hover:text-cyan-300 transition cursor-pointer">
+                <button onClick={() => onNavigate('examples')} className="hover:text-[#3ee98a] transition cursor-pointer">
                   Live Examples Gallery
                 </button>
               </li>
               <li>
-                <button onClick={() => jumpToTopic('shapes')} className="hover:text-cyan-300 transition cursor-pointer">
+                <button onClick={() => jumpToTopic('shapes')} className="hover:text-[#3ee98a] transition cursor-pointer">
                   30 Aesthetic Shapes Pack
                 </button>
               </li>
@@ -379,14 +460,14 @@ export function Docs({ onNavigate }: DocsProps) {
         </div>
 
         {/* Platforms 3-Column Grid */}
-        <section className="mt-16">
+        <section ref={platformsRef} className="mt-16">
           <h2 className="mb-6 text-2xl font-bold tracking-tight text-white">Platforms</h2>
           <div className="grid gap-6 md:grid-cols-3">
             {[
               {
                 id: 'react',
                 icon: Atom,
-                color: 'text-cyan-400',
+                color: 'text-[#3ee98a]',
                 title: 'Glowdots for React',
                 desc: 'Mount SSR-safe particle components with React refs and StrictMode support.',
                 snippet: `<Sphere\n  palette="ember"\n  bloom={0.5}\n  holdCharge\n/>`,
@@ -423,7 +504,7 @@ export function Docs({ onNavigate }: DocsProps) {
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-zinc-400">{p.desc}</p>
 
-                <pre className="mt-5 overflow-x-auto bg-black/50 p-3.5 font-mono text-[11px] leading-relaxed text-cyan-200">
+                <pre className="mt-5 overflow-x-auto bg-black/50 p-3.5 font-mono text-[11px] leading-relaxed text-zinc-200">
                   <code>{p.snippet}</code>
                 </pre>
 
@@ -462,27 +543,33 @@ export function Docs({ onNavigate }: DocsProps) {
           </div>
         </section>
 
-        {/* Guides 3-Column Grid */}
-        <section className="mt-16">
-          <h2 className="mb-6 text-2xl font-bold tracking-tight text-white">Guides</h2>
+        {/* Guides 3-Column Grid (Motion.dev crisp monochrome + mint/yellow/ember accents) */}
+        <section ref={guidesRef} className="mt-16">
+          <div className="mb-6 flex items-baseline justify-between">
+            <h2 className="text-2xl font-bold tracking-tight text-white">Guides</h2>
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-500">03 CORE WORKFLOWS</span>
+          </div>
           <div className="grid gap-4 md:grid-cols-3">
             {[
-              { id: 'logo', icon: ImageIcon, color: 'text-purple-400', title: 'Logo / SVG to Particles', desc: 'Rasterize PNGs or inline SVGs with brand RGB color preservation.' },
-              { id: 'audio', icon: Music, color: 'text-pink-400', title: 'Audio Reactivity', desc: 'Drive scale, bloom, and beats from <audio> or microphone streams.' },
-              { id: 'custom', icon: Wand2, color: 'text-cyan-400', title: 'Custom defineShape()', desc: 'Author GPU-animated shapes with zero GLSL boilerplate.' }
+              { num: '01', id: 'logo', icon: ImageIcon, color: 'text-[#ff8a3d]', title: 'Logo / SVG to Particles', desc: 'Rasterize PNGs or inline SVGs with brand RGB color preservation.' },
+              { num: '02', id: 'audio', icon: Music, color: 'text-[#f5e11c]', title: 'Audio Reactivity', desc: 'Drive scale, bloom, and beats from <audio> or microphone streams.' },
+              { num: '03', id: 'custom', icon: Wand2, color: 'text-[#3ee98a]', title: 'Custom defineShape()', desc: 'Author GPU-animated shapes with zero GLSL boilerplate.' }
             ].map((g) => (
               <motion.button
                 key={g.id}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.99 }}
                 onClick={() => jumpToTopic(g.id)}
-                className="group flex flex-col items-start border border-white/10 bg-[#0c0c0f] p-5 text-left hover:border-white/25 transition cursor-pointer"
+                className="group flex flex-col items-start border border-white/10 bg-[#0c0c0f]/75 p-6 text-left backdrop-blur-md hover:border-white/25 transition cursor-pointer"
               >
                 <div className="flex w-full items-center justify-between">
-                  <g.icon className={`h-4 w-4 ${g.color}`} />
-                  <ChevronRight className="h-4 w-4 text-zinc-600 group-hover:text-white transition" />
+                  <div className="flex items-center gap-2.5">
+                    <span className="font-mono text-[10px] text-zinc-500">{g.num}</span>
+                    <g.icon className={`h-4 w-4 ${g.color}`} />
+                  </div>
+                  <ArrowRight className="h-3.5 w-3.5 text-zinc-600 group-hover:translate-x-0.5 group-hover:text-white transition" />
                 </div>
-                <h3 className="mt-4 text-sm font-semibold text-white">{g.title}</h3>
+                <h3 className="mt-5 text-sm font-semibold tracking-tight text-white">{g.title}</h3>
                 <p className="mt-1.5 text-xs leading-relaxed text-zinc-400">{g.desc}</p>
               </motion.button>
             ))}
@@ -490,10 +577,10 @@ export function Docs({ onNavigate }: DocsProps) {
         </section>
 
         {/* Interactive Split Code + Live Preview Showcase */}
-        <section id="topic-reader" className="mt-16 overflow-hidden border border-white/10 bg-[#0c0c0f]">
+        <section id="topic-reader" className="mt-16 overflow-hidden border border-white/10 bg-[#0c0c0f]/80 backdrop-blur-md">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-6 py-4">
             <div className="flex items-center gap-3">
-              <span className="rounded bg-cyan-400/15 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-cyan-300">
+              <span className="bg-[#3ee98a]/15 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-[#3ee98a]">
                 {activeTopic.category}
               </span>
               <h3 className="text-base font-semibold text-white">{activeTopic.title}</h3>
@@ -567,20 +654,20 @@ export function Docs({ onNavigate }: DocsProps) {
         </section>
 
         {/* Production Options Reference with Category Tabs */}
-        <section className="mt-16">
+        <section ref={apiRef} className="mt-16">
           <div className="mb-5 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <div>
               <h2 className="text-2xl font-bold tracking-tight text-white">Options Reference</h2>
-              <p className="mt-1 text-xs text-zinc-500">All options are reactive via <code className="text-zinc-300">fx.update(opts)</code> with smooth interpolation.</p>
+              <p className="mt-1 text-xs text-zinc-400">All options are reactive via <code className="text-zinc-200">fx.update(opts)</code> with smooth interpolation.</p>
             </div>
-            <div className="flex flex-wrap gap-1 rounded-lg border border-white/10 bg-[#0c0c0f] p-1">
+            <div className="flex flex-wrap gap-1 border border-white/10 bg-[#0c0c0f]/80 p-1 backdrop-blur-md">
               {(['All', 'Design', 'Polish', 'Physics', 'Events'] as const).map((cat) => {
                 const active = optCategory === cat
                 return (
                   <button
                     key={cat}
                     onClick={() => setOptCategory(cat)}
-                    className={`relative px-3 py-1 text-[11px] font-medium transition cursor-pointer ${
+                    className={`relative px-3 py-1 font-mono text-[11px] font-medium transition cursor-pointer ${
                       active ? 'text-black font-semibold' : 'text-zinc-400 hover:text-white'
                     }`}
                   >
@@ -588,7 +675,7 @@ export function Docs({ onNavigate }: DocsProps) {
                       <motion.span
                         layoutId="opt-cat-pill"
                         transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-                        className="absolute inset-0 rounded bg-cyan-400"
+                        className="absolute inset-0 bg-white"
                       />
                     )}
                     <span className="relative z-10">{cat}</span>
@@ -598,20 +685,25 @@ export function Docs({ onNavigate }: DocsProps) {
             </div>
           </div>
 
-          <div className="divide-y divide-white/10 border border-white/10 bg-[#0c0c0f]">
+          <div className="divide-y divide-white/10 border border-white/10 bg-[#0c0c0f]/75 backdrop-blur-md">
+            <div className="hidden px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.12em] text-zinc-500 sm:grid sm:grid-cols-[230px_180px_1fr] sm:gap-4">
+              <span>Option</span>
+              <span>Default / Type</span>
+              <span>Description</span>
+            </div>
             {filteredOptions.map((o) => (
               <div
                 key={o.name}
-                className="grid gap-2 px-5 py-3.5 text-xs transition-colors hover:bg-white/[0.02] sm:grid-cols-[220px_140px_1fr] sm:items-center sm:gap-4"
+                className="grid gap-2 px-5 py-3.5 text-xs transition-colors hover:bg-white/[0.03] sm:grid-cols-[230px_180px_1fr] sm:items-center sm:gap-4"
               >
                 <div className="flex items-center gap-2">
-                  <code className="font-mono font-semibold text-cyan-300">{o.name}</code>
+                  <code className="font-mono font-semibold text-white">{o.name}</code>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="rounded bg-white/5 px-2 py-0.5 font-mono text-[10px] text-zinc-400">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="bg-[#3ee98a]/12 px-2 py-0.5 font-mono text-[10px] text-[#3ee98a]">
                     {o.def}
                   </span>
-                  <span className="text-[10px] text-zinc-600">{o.type}</span>
+                  <span className="font-mono text-[10px] text-zinc-500">{o.type}</span>
                 </div>
                 <p className="text-zinc-400">{o.desc}</p>
               </div>

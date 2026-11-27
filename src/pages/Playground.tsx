@@ -186,7 +186,7 @@ export function Playground({ initialType = 'sphere', initialOptions }: Playgroun
             whileTap={{ scale: 0.9 }}
             onClick={() => stepCarousel(1)}
             disabled={morphing}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-cyan-400 text-black hover:bg-cyan-300 disabled:opacity-40 transition cursor-pointer"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#3ee98a] text-black hover:bg-[#5ef39f] disabled:opacity-40 transition cursor-pointer"
             title="Next shape"
           >
             <ChevronRight className="h-4 w-4" />
@@ -220,7 +220,7 @@ export function Playground({ initialType = 'sphere', initialOptions }: Playgroun
                     className="absolute inset-0 rounded-lg bg-white/10 border border-white/10"
                   />
                 )}
-                <t.icon className={`relative z-10 h-3.5 w-3.5 ${active ? 'text-cyan-400' : ''}`} />
+                <t.icon className={`relative z-10 h-3.5 w-3.5 ${active ? 'text-[#3ee98a]' : ''}`} />
                 <span className="relative z-10">{t.label}</span>
               </button>
             )
@@ -239,7 +239,7 @@ export function Playground({ initialType = 'sphere', initialOptions }: Playgroun
                 <select
                   value={type}
                   onChange={(e) => handleMorph(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-[#141418] px-3 py-2.5 text-xs font-medium text-white outline-none focus:border-cyan-400/50"
+                  className="w-full rounded-xl border border-white/10 bg-[#141418] px-3 py-2.5 text-xs font-medium text-white outline-none focus:border-[#3ee98a]/50"
                 >
                   <optgroup label="Core Effects (13)">
                     {coreNames.map((n) => (
@@ -258,7 +258,7 @@ export function Playground({ initialType = 'sphere', initialOptions }: Playgroun
               <div>
                 <div className="mb-2 flex items-center justify-between">
                   <label className="text-[11px] font-medium text-zinc-400">Palette</label>
-                  <span className="font-mono text-[10px] text-cyan-400">{val('palette')}</span>
+                  <span className="font-mono text-[10px] text-[#3ee98a]">{val('palette')}</span>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   {Object.entries(PALETTES).map(([name, colors]) => {
@@ -269,7 +269,7 @@ export function Playground({ initialType = 'sphere', initialOptions }: Playgroun
                         onClick={() => setOpt('palette', name)}
                         className={`flex items-center gap-2 rounded-xl border px-2.5 py-2 text-left transition cursor-pointer ${
                           active
-                            ? 'border-cyan-400 bg-cyan-400/10 text-white'
+                            ? 'border-[#3ee98a] bg-[#3ee98a]/10 text-white'
                             : 'border-white/10 bg-[#141418] text-zinc-400 hover:border-white/25'
                         }`}
                       >
@@ -315,7 +315,7 @@ export function Playground({ initialType = 'sphere', initialOptions }: Playgroun
                     type="text"
                     value={val('text') ?? 'FX'}
                     onChange={(e) => setOpt('text', e.target.value)}
-                    className="w-full rounded-lg border border-white/10 bg-black/50 px-3 py-2 text-xs text-white outline-none focus:border-cyan-400/50"
+                    className="w-full rounded-lg border border-white/10 bg-black/50 px-3 py-2 text-xs text-white outline-none focus:border-[#3ee98a]/50"
                   />
                   <SliderRow label="fontSize" min={60} max={300} step={10} value={val('fontSize') ?? 180} onChange={(v) => setOpt('fontSize', v)} />
                 </div>
@@ -324,8 +324,8 @@ export function Playground({ initialType = 'sphere', initialOptions }: Playgroun
               {type === 'logo' && (
                 <div className="space-y-3 rounded-xl border border-white/10 bg-[#121216] p-3.5">
                   <ToggleRow label="Preserve RGB colors" checked={val('preserveColors') ?? true} onChange={(v) => setOpt('preserveColors', v)} />
-                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-white/20 bg-black/40 px-3 py-2.5 text-xs text-zinc-300 hover:border-cyan-400/60 hover:text-white transition">
-                    <Upload className="h-3.5 w-3.5 text-cyan-400" />
+                  <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-white/20 bg-black/40 px-3 py-2.5 text-xs text-zinc-300 hover:border-[#3ee98a]/60 hover:text-white transition">
+                    <Upload className="h-3.5 w-3.5 text-[#3ee98a]" />
                     <span>Upload PNG / SVG / WebP</span>
                     <input
                       type="file"
@@ -368,7 +368,7 @@ export function Playground({ initialType = 'sphere', initialOptions }: Playgroun
                       key={m}
                       onClick={() => setOpt('interaction', m)}
                       className={`rounded-lg py-1.5 text-[10px] font-medium capitalize transition cursor-pointer ${
-                        val('interaction') === m ? 'bg-cyan-400 text-black font-semibold' : 'text-zinc-400 hover:text-white'
+                        val('interaction') === m ? 'bg-[#3ee98a] text-black font-semibold' : 'text-zinc-400 hover:text-white'
                       }`}
                     >
                       {m}
@@ -427,7 +427,7 @@ export function Playground({ initialType = 'sphere', initialOptions }: Playgroun
                     key={fw}
                     onClick={() => setCopyFramework(fw)}
                     className={`rounded-lg py-1.5 font-medium capitalize transition cursor-pointer ${
-                      copyFramework === fw ? 'bg-cyan-400 text-black font-semibold' : 'text-zinc-400 hover:text-white'
+                      copyFramework === fw ? 'bg-[#3ee98a] text-black font-semibold' : 'text-zinc-400 hover:text-white'
                     }`}
                   >
                     {fw === 'element' ? '<glow-dots>' : fw}
@@ -447,7 +447,7 @@ export function Playground({ initialType = 'sphere', initialOptions }: Playgroun
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={handleCopy}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-cyan-400 py-2.5 text-xs font-bold text-black hover:bg-cyan-300 transition cursor-pointer"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#3ee98a] py-2.5 text-xs font-bold text-black hover:bg-[#5ef39f] transition cursor-pointer"
           >
             {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
             {copied ? 'Copied Snippet!' : `Copy ${copyFramework} Code`}
@@ -485,7 +485,7 @@ function SliderRow({
     <div>
       <div className="mb-1 flex justify-between text-[11px]">
         <span className="text-zinc-400">{label}</span>
-        <span className="font-mono text-[10px] text-cyan-400">{display}</span>
+        <span className="font-mono text-[10px] text-[#3ee98a]">{display}</span>
       </div>
       <input
         type="range"
@@ -518,7 +518,7 @@ function ToggleRow({
         aria-checked={checked}
         onClick={() => onChange(!checked)}
         className={`relative h-5 w-9 rounded-full transition-colors cursor-pointer ${
-          checked ? 'bg-cyan-500' : 'bg-zinc-700'
+          checked ? 'bg-[#3ee98a]' : 'bg-zinc-700'
         }`}
       >
         <span

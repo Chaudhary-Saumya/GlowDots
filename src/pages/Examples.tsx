@@ -183,7 +183,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
         />
         <div className="relative mx-auto max-w-7xl px-6 pb-8 pt-10 sm:px-10">
           <div className="rounded-2xl border border-white/20 bg-[#08080a]/95 p-8 shadow-2xl backdrop-blur-xl sm:p-10">
-            <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono uppercase tracking-[0.14em] text-cyan-400">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] font-mono uppercase tracking-[0.14em] text-[#3ee98a]">
               <span>EXAMPLE LIBRARY</span>
               <span className="text-zinc-400">{ALL_EXAMPLES.length} GPU PATTERNS</span>
             </div>
@@ -192,7 +192,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
                 Examples
               </h1>
               <p className="max-w-md text-xs leading-relaxed text-zinc-400 sm:text-sm">
-                Every shape from <code className="text-cyan-300">glowdots</code> and <code className="text-cyan-300">glowdots/shapes</code> rendered in real 3D. Hover any card to interact live or open in Studio.
+                Every shape from <code className="text-[#3ee98a]">glowdots</code> and <code className="text-[#3ee98a]">glowdots/shapes</code> rendered in real 3D. Hover any card to interact live or open in Studio.
               </p>
             </div>
           </div>
@@ -213,7 +213,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
                 setPageIdx(1)
               }}
               placeholder="FILTER // name, category"
-              className="w-full rounded-lg border border-white/15 bg-[#0d0d10] py-2 pl-9 pr-3 font-mono text-[11px] text-zinc-200 placeholder:text-zinc-600 outline-none focus:border-cyan-400/50 transition"
+              className="w-full rounded-lg border border-white/15 bg-[#0d0d10] py-2 pl-9 pr-3 font-mono text-[11px] text-zinc-200 placeholder:text-zinc-600 outline-none focus:border-[#3ee98a]/50 transition"
             />
           </div>
 
@@ -225,7 +225,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
                 setOnlyFavs(e.target.checked)
                 setPageIdx(1)
               }}
-              className="accent-cyan-400"
+              className="accent-[#3ee98a]"
             />
             <span>Favourites ({favs.size})</span>
           </label>
@@ -276,7 +276,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
               />
               <button
                 onClick={() => setSidebarShapeIdx((i) => (i + 1) % SIDEBAR_SHAPES.length)}
-                className="absolute right-2.5 top-2.5 rounded-full border border-white/15 bg-black/70 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-cyan-300 backdrop-blur-md hover:border-cyan-400/50 transition cursor-pointer"
+                className="absolute right-2.5 top-2.5 rounded-full border border-white/15 bg-black/70 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-[#3ee98a] backdrop-blur-md hover:border-[#3ee98a]/50 transition cursor-pointer"
               >
                 Next ↻
               </button>
@@ -286,7 +286,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
             </div>
             <div className="p-3.5">
               <div className="flex items-center gap-1.5 text-[11px] font-semibold text-white">
-                <Sparkles className="h-3.5 w-3.5 text-cyan-400" />
+                <Sparkles className="h-3.5 w-3.5 text-[#3ee98a]" />
                 <span>43 Shapes Studio</span>
               </div>
               <p className="mt-1 text-[11px] leading-snug text-zinc-400">
@@ -296,7 +296,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => onNavigate?.('playground')}
-                className="mt-3 flex w-full items-center justify-between rounded-lg bg-cyan-400 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-black hover:bg-cyan-300 transition cursor-pointer"
+                className="mt-3 flex w-full items-center justify-between rounded-lg bg-[#3ee98a] px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-black hover:bg-[#5ef39f] transition cursor-pointer"
               >
                 <span>Open Studio</span>
                 <ArrowRight className="h-3 w-3" />
@@ -339,7 +339,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
                       Black Hole &amp; Accretion Orbit
                     </h3>
                     <p className="mt-2 text-xs leading-relaxed text-zinc-400">
-                      Gravitational lensing photon ring with 360° spring-inertia orbit, wheel zoom, and multi-pass Gaussian bloom from <code className="text-cyan-300">glowdots/shapes</code>.
+                      Gravitational lensing photon ring with 360° spring-inertia orbit, wheel zoom, and multi-pass Gaussian bloom from <code className="text-[#3ee98a]">glowdots/shapes</code>.
                     </p>
                   </div>
 
@@ -367,7 +367,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
                             clickBurst: true
                           })
                         }
-                        className="inline-flex items-center gap-2 rounded-lg bg-[#2563eb] px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white hover:bg-blue-500 transition cursor-pointer"
+                        className="inline-flex items-center gap-2 rounded-lg bg-[#f5e11c] px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-black hover:bg-[#ffe938] transition cursor-pointer"
                       >
                         <span>Open</span>
                         <ArrowRight className="h-3.5 w-3.5" />
@@ -405,7 +405,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
                     onMouseLeave={() => {
                       if (activeLiveId === ex.id) setActiveLiveId(null)
                     }}
-                    className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-[#0b0b0e] hover:border-cyan-400/40 hover:shadow-[0_12px_40px_-12px_rgba(34,211,238,0.18)] transition-all"
+                    className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-[#0b0b0e] hover:border-[#3ee98a]/40 hover:shadow-[0_12px_40px_-12px_rgba(62,233,138,0.18)] transition-all"
                   >
                     <div className="relative h-48 w-full overflow-hidden border-b border-white/10 bg-[#060608]">
                       {isLive ? (
@@ -430,7 +430,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
 
                       {!isLive && (
                         <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full border border-white/15 bg-black/75 px-2.5 py-0.5 text-[10px] text-zinc-300 opacity-0 group-hover:opacity-100 transition backdrop-blur-md">
-                          <Play className="h-2.5 w-2.5 fill-current text-cyan-400" /> Interactive
+                          <Play className="h-2.5 w-2.5 fill-current text-[#3ee98a]" /> Interactive
                         </span>
                       )}
                     </div>
@@ -457,7 +457,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
                         <motion.button
                           whileTap={{ scale: 0.97 }}
                           onClick={() => onOpenInStudio(ex.id, ex.options)}
-                          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-white/[0.06] py-1.5 text-[11px] font-medium text-zinc-200 hover:bg-cyan-400 hover:text-black transition cursor-pointer"
+                          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-white/[0.06] py-1.5 text-[11px] font-medium text-zinc-200 hover:bg-[#3ee98a] hover:text-black transition cursor-pointer"
                         >
                           <Sliders className="h-3 w-3" />
                           Studio
@@ -500,7 +500,7 @@ export function Examples({ onOpenInStudio, onNavigate }: ExamplesProps) {
                       onClick={() => setPageIdx(n)}
                       className={`h-8 w-8 rounded-lg font-mono text-xs transition cursor-pointer ${
                         currentPage === n
-                          ? 'bg-cyan-400 font-bold text-black'
+                          ? 'bg-[#3ee98a] font-bold text-black'
                           : 'border border-white/10 bg-white/[0.03] text-zinc-400 hover:text-white'
                       }`}
                     >

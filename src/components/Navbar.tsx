@@ -36,7 +36,7 @@ export function Navbar({ page, onNavigate }: NavbarProps) {
           <motion.span
             layoutId="nav-active-underline"
             transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-            className="absolute inset-x-0 -bottom-0.5 h-[1.5px] bg-cyan-400"
+            className="absolute inset-x-0 -bottom-0.5 h-[1.5px] bg-[#3ee98a]"
           />
         )}
       </button>

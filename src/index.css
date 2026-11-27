@@ -28,7 +28,7 @@ input[type='range'].studio-range::-webkit-slider-thumb {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #22d3ee;
+  background: #3ee98a;
   border: 2px solid #09090b;
   cursor: pointer;
   transition: transform 0.12s ease;
